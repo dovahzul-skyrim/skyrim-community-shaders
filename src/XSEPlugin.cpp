@@ -133,7 +133,8 @@ void MessageHandler(SKSE::MessagingInterface::Message* message)
 
 				Feature::ForEachLoadedFeature("DataLoaded", [](Feature* feature) { feature->DataLoaded(); });
 
-				NativeMenu::Register();
+				if (!globals::state->menuLocked)
+					NativeMenu::Register();
 			}
 
 			break;

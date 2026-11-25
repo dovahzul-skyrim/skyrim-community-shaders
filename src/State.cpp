@@ -366,6 +366,12 @@ void State::Load(ConfigMode a_configMode, bool a_allowReload)
 		}
 	}
 
+	// Read before the user settings merge: the distribution that ships SettingsDefault.json
+	// locks the menu, and a SettingsUser.json cannot unlock it.
+	menuLocked = settings.contains("Lock Menu") && settings["Lock Menu"].is_boolean() && settings["Lock Menu"].get<bool>();
+	if (menuLocked)
+		logger::info("Menu locked by default settings: hotkeys, first-time setup and game-menu rows are off");
+
 	// Step 2: Apply user settings on top of defaults (user preferences)
 	if (a_configMode == ConfigMode::USER) {
 		json userSettings;
