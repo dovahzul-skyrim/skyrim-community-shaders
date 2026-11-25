@@ -1115,10 +1115,13 @@ void Menu::ProcessInputEventQueue()
 							 globals::features::effects11.ToggleEnabled();
 					 } },
 				};
+				const bool locked = globals::state->menuLocked;
 				// RenderDoc's capture key is a single, unmodified key; only consider it on key-up.
-				if (!combosOnly && globals::features::renderDoc.HandleCaptureHotkey(key))
+				if (!locked && !combosOnly && globals::features::renderDoc.HandleCaptureHotkey(key))
 					return true;
 				for (const auto& ka : keyActions) {
+					if (locked && &ka.settingKey != &settings.SkipCompilationKey)
+						continue;
 					const bool isCombo = ka.settingKey.size() > 1;
 					if (isCombo == combosOnly && InputCombo::MatchesKeyboardCombo(ka.settingKey, key)) {
 						ka.action();
@@ -1128,9 +1131,9 @@ void Menu::ProcessInputEventQueue()
 				return false;
 			};
 
-			// Hardcoded Shift+Enter toggle for the CS menu (always available)
+			// Hardcoded Shift+Enter toggle for the CS menu (unless the menu is locked)
 			if (event.IsDown() && key == VK_RETURN && (GetAsyncKeyState(VK_SHIFT) & 0x8000)) {
-				if (!HomePageRenderer::ShouldShowFirstTimeSetup()) {
+				if (!HomePageRenderer::ShouldShowFirstTimeSetup() && !globals::state->menuLocked) {
 					IsEnabled = !IsEnabled;
 					if (IsEnabled)
 						ImGui::GetIO().ClearInputKeys();

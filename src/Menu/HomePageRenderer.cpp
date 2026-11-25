@@ -570,7 +570,7 @@ void HomePageRenderer::RenderFirstTimeSetupDialog()
 bool HomePageRenderer::ShouldShowFirstTimeSetup()
 {
 	// Check if already completed this session
-	if (isFirstTimeSetupShown) {
+	if (isFirstTimeSetupShown || globals::state->menuLocked) {
 		return false;
 	}
 

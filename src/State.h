@@ -55,6 +55,7 @@ public:
 	uint32_t currentPixelDescriptor = 0;
 	spdlog::level::level_enum logLevel = spdlog::level::info;
 	bool enableDeveloperMode = false;  ///< Explicit developer mode toggle; also enabled when log level is debug/trace.
+	bool menuLocked = false;           ///< "Lock Menu" of SettingsDefault.json: no hotkey, setup dialog or game-menu row opens the CS menus.
 	std::string shaderDefinesString = "";
 	std::vector<std::pair<std::string, std::string>> shaderDefines{};  // data structure to parse string into; needed to avoid dangling pointers
 
