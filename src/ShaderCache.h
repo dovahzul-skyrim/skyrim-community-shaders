@@ -384,8 +384,10 @@ namespace SIE
 		void SetDiskCache(bool value);
 		/** @brief Deletes the entire on-disk shader cache directory. */
 		void DeleteDiskCache();
-		/** @brief Validates disk cache integrity against current shader sources and feature set. */
+		/** @brief Names the disk cache after the current shader sources and removes the folders of other sources. */
 		void ValidateDiskCache();
+		/** Hash of the shader sources naming the disk cache folder; set by ValidateDiskCache. */
+		const std::wstring& GetDiskCacheSource() const { return diskCacheSource; }
 		/** @brief Writes cache metadata (version, feature list) to the disk cache directory. */
 		void WriteDiskCacheInfo();
 		/** Gets whether unchanged shaders are skipped during recompilation. */
@@ -800,7 +802,8 @@ namespace SIE
 
 		bool isEnabled = true;
 		bool isDiskCache = true;
-		bool isSkipUnchangedShaders = true;  ///< when true, recompile a disk-cached shader only if its source is newer
+		bool isSkipUnchangedShaders = true;  ///< kept for the settings file; the disk cache is keyed by source content instead
+		std::wstring diskCacheSource = L"unhashed";
 		bool isAsync = true;
 		bool isDump = false;
 		bool hideError = false;
